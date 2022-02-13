@@ -10,4 +10,9 @@ class PostList(generic.ListView):
     paginate_by = 6
 
 class PostDetail(View):
-    
+
+    def get(self, request, slug, *args, **kwargs):
+        queryset = Post.objects.filter(status=1).order_by('-created_on')
+        tenplate_name = 'index.html'
+        post = get_object_or_404(queryset, slug=slug)
+        comments = post.comments.filter(approve=True).order_by('created_on')
