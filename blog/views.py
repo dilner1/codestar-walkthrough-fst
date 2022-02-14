@@ -16,3 +16,16 @@ class PostDetail(View):
         tenplate_name = 'index.html'
         post = get_object_or_404(queryset, slug=slug)
         comments = post.comments.filter(approve=True).order_by('created_on')
+        liked = False
+        if post.likes.filter(id=self.request.user.id).exist():
+            liked = True
+        
+        return render(
+            request,
+            'post_detail.html',
+            {
+                'post': post,
+                'comments': comments,
+                'liked': liked
+            },
+        )
